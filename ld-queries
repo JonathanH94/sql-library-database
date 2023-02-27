@@ -1,0 +1,193 @@
+/* 1. The central managers of the libraries in the county, want to find out which publisher has the most books in stock */
+
+SELECT 
+Publisher,
+COUNT(Publisher) AS 'Total Books By Publisher'
+FROM book
+GROUP by Publisher
+ORDER BY COUNT(Publisher) DESC;
+
+/* 2. The central managers of the libraries in the county have asked if you can run the query again, but include the individual copies of each book */
+
+SELECT 
+Publisher,
+COUNT(Publisher) AS 'Total Books By Publisher'
+FROM book 
+JOIN inventory 
+USING (Book_ID)
+GROUP BY Publisher
+ORDER BY COUNT(Publisher) DESC;
+
+/* 3. Management would like the status of each loan */
+
+SELECT 
+Loan_no,
+Branch_id,
+Book_id,
+Membership_NO,
+Inventory_id,
+CASE 
+    WHEN return_date > date_due_back THEN 'Late'
+    WHEN return_date IS NULL THEN 'Outstanding'
+    ELSE 'On Time'
+END AS 'Loan Status'
+FROM book_loans;
+
+/* 4. Management would like to know the total volume of loans that are being returned late */
+
+SELECT 
+COUNT(*) AS 'Total Late Loans'
+FROM library_management_system.book_loans
+WHERE return_date > Date_due_back;
+
+/* 5. Management would like to compare the total volume of loans returned late to the total volume of loans returned on time, or before the due back date, and also, the total number of loans due back, but are still outstanding */
+
+SELECT 
+(SELECT COUNT(*) FROM book_loans WHERE return_date > date_due_back) AS 'Total Late Loans',
+(SELECT COUNT(*) FROM book_loans WHERE return_date IS NULL) AS 'Loans Outstanding Yet to be Returned',
+(SELECT COUNT(*) FROM book_loans WHERE return_date <= date_due_back) AS 'Total Loans On Time';
+
+
+/* 6. Management has asked if you could find out which members are returning books late */ 
+
+SELECT 
+*
+FROM book_loans bl
+JOIN customer c
+ON bl.Membership_NO = c.Membership_No
+JOIN book 
+USING (book_id)
+WHERE return_date > date_due_back;
+
+/* 7. Management has asked if the format of the previous information could be simplified, so it is easier to read */
+
+SELECT 
+concat_ws(' ', first_name, last_name) AS Name,
+Email, 
+PhoneNumber,
+c.Membership_NO,
+Loan_No,
+inventory_id,
+Title,
+Branch_ID
+FROM book_loans bl
+JOIN customer c
+ON bl.Membership_NO = c.Membership_No
+JOIN book 
+USING (book_id)
+WHERE return_date > date_due_back;
+
+
+/* 8. Management has asked if you could find out from the previous information, how many days overdue the loans were and order by the loan with the most overdue days */
+
+SELECT 
+concat_ws(' ', first_name, last_name) AS Name,
+Email, 
+PhoneNumber,
+c.Membership_NO,
+Loan_No,
+inventory_id,
+Title,
+Branch_ID,
+datediff(return_date, date_due_back) AS 'Days Loan Was Overdue'
+FROM book_loans bl
+JOIN customer c
+ON bl.Membership_NO = c.Membership_No
+JOIN book 
+USING (book_id)
+WHERE return_date > date_due_back 
+ORDER BY datediff(return_date, date_due_back) DESC;
+
+/* 9. Management has asked if fines could be issued based on the previous information, so they can try to deter future loans arriving back late. They have asked if you could calucate the fine based on the number of days x 1.50 for each day overdue. They would like the fines to be formatted in pounds */
+
+SELECT 
+concat_ws(' ', first_name, last_name) AS Name,
+Email, 
+PhoneNumber,
+c.Membership_NO,
+Loan_No,
+inventory_id,
+Title,
+Branch_ID,
+datediff(return_date, date_due_back) AS 'Days Loan Was Overdue',
+CONCAT ('£', datediff(return_date, date_due_back) * 1.50 )AS 'Total Fine'
+FROM book_loans bl
+JOIN customer c
+ON bl.Membership_NO = c.Membership_No
+JOIN book 
+USING (book_id)
+WHERE return_date > date_due_back 
+ORDER BY datediff(return_date, date_due_back) DESC;
+
+/* 10. Management has asked what titles are the most popular */
+
+SELECT 
+Title,
+COUNT(*) AS 'Number of Times Loaned Out'
+FROM book_loans bl
+JOIN book b
+ON b.Book_ID = bl.Book_ID
+JOIN inventory i
+ON i.Inventory_ID = bl.inventory_id
+GROUP BY Title
+ORDER BY COUNT(*) DESC;
+
+/* 11. Management has asked which branch has the most loans */
+
+SELECT 
+bl.Branch_id,
+l.Branch_name,
+COUNT(*) AS 'Total Number of Loans'
+FROM book_loans bl
+JOIN book b
+ON b.Book_ID = bl.Book_ID
+JOIN inventory i
+ON i.Inventory_ID = bl.inventory_id
+JOIN library_branch l
+ON l.Branch_ID = bl.Branch_ID
+GROUP BY bl.Branch_ID
+ORDER BY COUNT(*) DESC;
+
+/* 12. Management has asked if you could provide the information above, but with a percentage column */
+
+SELECT 
+bl.Branch_id,
+l.Branch_name,
+COUNT(*) AS 'Total Number of Loans',
+ROUND(COUNT(*) * 100 / (SELECT COUNT(*) FROM book_loans), 2) AS 'Percentage'
+FROM book_loans bl
+JOIN book b
+ON b.Book_ID = bl.Book_ID
+JOIN inventory i
+ON i.Inventory_ID = bl.inventory_id
+JOIN library_branch l
+ON l.Branch_ID = bl.Branch_ID
+GROUP BY bl.Branch_ID
+ORDER BY COUNT(*) DESC;
+
+/* 13. Using the information from 11., central office would like to know from the three most popular branches, which members have loaned out the most books. The top five will then be entered into a prize draw */
+
+SELECT 
+Membership_no,
+Email, 
+PhoneNumber,
+concat_ws(' ', first_name, last_name) AS Name,
+COUNT(*) AS 'Total Loans'
+FROM book_loans
+JOIN book
+USING (book_id)
+JOIN customer
+USING (membership_no)
+WHERE Branch_ID IN (3,6,7)
+GROUP BY membership_no, concat_ws(' ', first_name, last_name)
+ORDER BY COUNT(*) DESC
+LIMIT 5;
+
+
+
+
+
+
+
+
+
