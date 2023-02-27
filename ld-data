@@ -1,0 +1,1016 @@
+CREATE DATABASE library_database;
+
+
+/* Created table 1 */
+
+CREATE TABLE book (
+Book_ID INT PRIMARY KEY,
+Title VARCHAR(250),
+Publisher VARCHAR (50)
+);
+
+/* Created table 2 */
+
+CREATE TABLE Customer (
+Membership_No INT AUTO_INCREMENT,
+First_name VARCHAR (250),
+Last_name VARCHAR (250),
+Email VARCHAR(400),
+PhoneNumber VARCHAR(50),
+Address VARCHAR(250),
+District VARCHAR(50),
+PRIMARY KEY (Membership_No)
+);
+
+/* Created table 3 */
+
+CREATE TABLE library_branch (
+Branch_ID INT,
+Branch_Name VARCHAR(250),
+Address VARCHAR(400),
+PhoneNumber VARCHAR(50),
+District VARCHAR(50)
+);
+
+/* Created table 4, however, was not working so had to alter to add a primary key to table 3 */
+
+ALTER TABLE library_branch
+ADD PRIMARY KEY (Branch_ID);
+
+/* Created table 4. Now working */
+
+CREATE TABLE Book_loans (
+Loan_No INT NOT NULL PRIMARY KEY,
+Book_ID INT NOT NULL,
+Branch_ID INT,
+Membership_NO INT NOT NULL,
+Date_loaned_out VARCHAR(50),
+Date_due_back VARCHAR(50),
+Return_date VARCHAR(50),
+FOREIGN KEY (Book_Id) REFERENCES book(Book_ID),
+FOREIGN KEY (Branch_Id) REFERENCES library_branch(Branch_ID),
+FOREIGN KEY (Membership_No) REFERENCES customer(membership_no)
+);
+
+/* Created table 5 */
+
+CREATE TABLE inventory (
+Inventory_ID INT NOT NULL PRIMARY KEY,
+Book_ID INT NOT NULL, 
+Branch_ID INT NOT NULL,
+FOREIGN KEY (Book_Id) REFERENCES book(Book_ID),
+FOREIGN KEY (Branch_Id) REFERENCES library_branch(Branch_ID)
+);
+
+
+/* Updating Book table */
+
+ALTER TABLE book
+MODIFY Book_ID int NOT NULL;
+
+/* Inserting data into Book table */
+
+INSERT INTO book
+(book_ID, title, publisher) VALUES 
+(1, 'Pride and Prejudice', 'Wordsworth Classics'),
+(2, 'To Kill a Mockingbird', 'Cornerstone'),
+(3, 'The Great Gatsby', 'Everyman');
+
+INSERT INTO book
+(book_ID, title, publisher) VALUES 
+(4, 'One Hundred Years of Solitude ', 'Penguin Books Ltd'),
+(5, 'In Cold Blood', 'Random House USA Inc'),
+(6, 'Wide Sargasso Sea ', 'Penguin Books Ltd'),
+(7, 'Brave New World', 'Vintage Publishing');
+
+/* Updating Book_loans table */
+
+ALTER TABLE book_loans
+MODIFY Loan_No INT NOT NULL auto_increment;
+
+/* Inserting data into Book table */
+
+INSERT INTO book
+(book_ID, title, publisher) VALUES 
+(8, 'I Capture The Castle', 'Vintage Publishing'),
+(9, 'Jane Eyre', 'Oxford University Press'),
+(10, 'Crime and Punishment', 'Penguin Books Ltd');
+
+/* Updating Book table */
+
+ALTER TABLE book 
+ADD COLUMN author VARCHAR(250) AFTER Title;
+
+UPDATE Book
+SET author = 'Jane Austen'
+WHERE Book_ID = 1;
+
+UPDATE Book
+SET author = 'Harper Lee'
+WHERE Book_ID = 2;
+
+UPDATE Book
+SET author = 'F. Scott Fitzgerald'
+WHERE Book_ID = 3;
+
+UPDATE Book
+SET author = 'Gabriel García Márquez'
+WHERE Book_ID = 4;
+
+UPDATE Book
+SET author = 'Truman Capote'
+WHERE Book_ID = 5;
+
+UPDATE Book
+SET author = 'Jean Rhys'
+WHERE Book_ID = 6;
+
+UPDATE Book
+SET author = 'Aldous Huxley'
+WHERE Book_ID = 7;
+
+UPDATE Book
+SET author = ' Dodie Smith'
+WHERE Book_ID = 8;
+
+UPDATE Book
+SET author = 'Charlotte Brontë'
+WHERE Book_ID = 9;
+
+UPDATE Book
+SET author = 'Fyodor Dostoevsky'
+WHERE Book_ID = 10;
+
+/* Inserting data into Book table */
+
+INSERT INTO book
+(book_ID, title, author, publisher) VALUES 
+(11, 'The Secret History', 'Donna Tartt', 'Penguin Books Ltd'),
+(12, 'The Call of the Wild', 'Jack London', 'Penguin Random House Childrens UK'),
+(13, 'The Chrysalids', 'John Wyndham', 'Orion Publishing Co'),
+(14, 'Persuasion ', 'Jane Austen', 'Pan Macmillan'),
+(15, 'Moby-Dick', 'Herman Melville', 'Penguin Books Ltd'),
+(16, 'The Lion, the Witch and the Wardrobe', 'C.S. Lewis', 'HarperCollins Publishers'),
+(17, 'To the Lighthouse ', 'Virginia Woolf', 'Vintage Publishing'),
+(18, 'The Death of the Heart', 'Elizabeth Bowen', 'Vintage Publishing'),
+(19, 'Tess of the dUrbervilles', 'Thomas Hardy', 'Oxford University Press'),
+(20, 'Frankenstein', 'Mary Shelley', 'Penguin Books Ltd');
+
+/* Updating library_branch table */
+
+ALTER TABLE library_branch
+ADD COLUMN Post_Code VARCHAR(250) AFTER Address;
+
+/* Inserting data into library_branch table */
+
+INSERT INTO library_branch 
+(branch_id, branch_name, address, post_code, PhoneNumber, District) VALUES
+(1,'Alford Library and Focal Point', '6 South Market Place', 'LN13 9AF', 01522782010, 'Alford');
+
+INSERT INTO library_branch 
+(branch_id, branch_name, address, post_code, PhoneNumber, District) VALUES
+(2,'Birchwood Library and Community Hub', 'Larchwood Crescent', 'LN6 0NA', 01522782011, 'Lincoln'),
+(3, 'Boston Library', 'County Hall', 'PE21 6DY', 01522782012, 'Boston'),
+(4, 'Bracebridge Heath Library and Community Hub', 'London Road, Bracebridge Heath', 'LN4 2LA', 01522782037, 'Lincoln'),
+(5, 'Branston Community Library', 'Station Road', 'LN4 1LH', 01522782047, 'Lincoln'),
+(6, 'Woodhall Spa Library', '2 Station Road', 'LN10 6QL', 01522782090, 'Woodhall Spa'),
+(7, 'Lincoln Central Library', 'Free School Lane', 'LN2 1EZ', 01522782070, 'Lincoln');
+
+/* Updating customer table */
+
+ALTER TABLE customer
+ADD COLUMN Post_Code VARCHAR(250) AFTER Address;
+
+/* Inserting data into customer table */
+
+INSERT INTO customer
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Josh', 'Girth', 'Girthy6969@gmail.co.uk', '447554476318', 'The Ranch, Butts Lane', 'PE20 69G', 'Boston');
+
+INSERT INTO customer
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Isabel', 'Lakes', 'Fizzyizzy@hotmail.co.uk', '447986968962', 'The Manor, Crowell Avenue', 'LN2 1BG', 'Woodhall Spa');
+
+/* Deleting rows in customer table to change the auto-incredment no. */
+
+DELETE FROM customer 
+WHERE Membership_No = 1;
+
+DELETE FROM customer 
+WHERE Membership_No = 2;
+
+/*Altering customer table */
+
+ALTER TABLE customer AUTO_INCREMENT = 1000;
+
+/* Inserting data into customer table */
+
+INSERT INTO customer
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Josh', 'Girth', 'Girthy6969@gmail.co.uk', '447554476318', 'The Ranch, Butts Lane', 'PE20 69G', 'Boston'),
+('Isabel', 'Lakes', 'Fizzyizzy@hotmail.co.uk', '447986968962', 'The Manor, Crowell Avenue', 'LN2 1BG', 'Woodhall Spa');
+
+
+/*Altering book_loans table */
+
+ALTER TABLE book_loans AUTO_INCREMENT = 001100;
+
+/* Inserting data into customer table */
+
+INSERT INTO customer 
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Jake', 'Simons', 'jsimons@jsdesign.co.uk', '447185160809', 'Yuppie St Hughes' , 'LN6 9WE', 'Lincoln'),
+('Marc', 'Johnson', 'Mj76@sky.co.uk', '447806496526', '85 Grant Road', 'PE20 6NM', 'Skegness'),
+('Lisa', 'Williams', 'lisa.williams@bt.net', '447413380388', '16 Minster Way', 'LN13 9CD', 'Alford'),
+('John', 'Jones', 'jjones65@hotmail.com', '447397992011', 'Unit 3, 125 Old Broad Street', 'LN2 1AR', 'Woodhall Spa');
+
+INSERT INTO customer 
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Karly', 'Dodds', 'ikarly2000@hotmail.com', '447719408567', 'Flat 5, Wheatstone House', 'LN4 2BL', 'Lincoln'),
+('Rodney', 'Kolar', 'rodders50@sky.net', '01526352851', 'Crown House', 'PE25 8RW', 'Skegness'),
+('Sammie', 'Fridell', 'sammief99@hotmail.com', '447253166213', '16 Sedgmoor Road', 'LN4 2PL', 'Lincoln'),
+('Jack', 'Pellot', 'jp1992@gmail.com', '447482129704', '3 Christ Croft', 'NG34 5WN', 'Sleaford');
+
+INSERT INTO customer 
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Natasha', 'Dalhart', 'tashad86@yahoo.co.uk', '44743985318', '168 London Road', 'PE21 5BQ', 'Boston'),
+('Avery', 'Bickham', NULL, '01522393000', 'Hirfron Estate, 11 Crome Road', 'LN10 6QV', 'Woodhall Spa');
+
+INSERT INTO customer 
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Trevor', 'Young', 'Trevy12574@aol.net', NULL, 'Westlands Orchard, Wantage Road', 'LN4 2KB', 'Lincoln'),
+('Sadie', 'Slinkard', 'Sadie.slinkard@icloud.com', '44773480223', 'Flat 3, 21 Westbury Road', 'LN2 1AQ', 'Lincoln');
+
+INSERT INTO customer 
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Benny', 'Senno', 'sennob745@sky.net', '447451566938', '2 Carlton Close', 'PE21 9UZ', 'Boston'),
+('John', 'Walker', 'johnnyboy82@gmail.com', '44728112644', '9 Hutton Drive', 'LN8 4AD', 'Wragby'),
+('Terrence', 'Nightwine', 'terryn@btinternet.com', '44744275914', 'Downs Farmhouse, Downs Road', 'PE9 3DD', 'Stamford'),
+('Jean', 'Everrit', NULL, '01205392711', '9 Jasper Avenue, Swineshead', 'PE20 3LF', 'Boston');
+
+INSERT INTO customer 
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Louise', 'Fiddler', 'loufiddler1994@hotmail.com', '44744671811', 'Flat 10, York House', 'LN2 1FX', 'Lincoln');
+
+INSERT INTO library_branch 
+(branch_id, branch_name, address, post_code, PhoneNumber, District) VALUES
+(8, 'Wragby Community Hub', 'Millbrook Lane', 'LN8 5AB', 01522782089, 'Wragby'),
+(9, 'Stamford Library', 'High Street', 'PE9 2BB', 01522782001, 'Stamford');
+
+INSERT INTO library_branch 
+(branch_id, branch_name, address, post_code, PhoneNumber, District) VALUES
+(10, 'Swineshead Community Library', 'Methodist Church, High Street', 'PE20 3LH', 01522782002, 'Boston');
+
+/*Altering book_loans table */
+
+ALTER TABLE book_loans
+ADD COLUMN inventory_id INT NOT NULL AFTER Loan_No;
+
+ALTER TABLE book_loans
+ADD FOREIGN KEY (inventory_Id) REFERENCES inventory(inventory_ID);
+
+/* Inserting data into inventory table - Branch_id 1 */
+
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(1, 1, 1),
+(2, 1, 1),
+(3, 1, 1),
+(4, 2, 1),
+(5, 2, 1),
+(6, 3, 1),
+(7, 4, 1),
+(8, 5, 1),
+(9, 6, 1),
+(10, 6, 1),
+(11, 7, 1),
+(12, 7, 1),
+(13, 8, 1),
+(14, 9, 1),
+(15, 9, 1),
+(16, 9, 1),
+(17, 10, 1),
+(18, 11, 1),
+(19, 12, 1),
+(20, 15, 1),
+(21, 16, 1),
+(22, 16, 1),
+(23, 19, 1),
+(24, 20, 1),
+(25, 20, 1);
+
+/* Inserting data into inventory table - Branch_id 2 */
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(26, 1, 2),
+(27, 2, 2),
+(28, 3, 2),
+(29, 7, 2),
+(30, 9, 2),
+(31, 9, 2),
+(32, 10, 2),
+(33, 16, 2),
+(34, 20, 2),
+(35, 20, 2);
+
+/* Inserting data into inventory table - Branch_id 3 */
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(36, 1, 3),
+(37, 1, 3),
+(38, 1, 3),
+(39, 1, 3),
+(40, 2, 3),
+(41, 2, 3),
+(42, 2, 3),
+(43, 3, 3),
+(44, 3, 3),
+(45, 3, 3),
+(46, 4, 3),
+(47, 4, 3),
+(48, 5, 3),
+(49, 5, 3),
+(50, 6, 3),
+(51, 7, 3),
+(52, 8, 3),
+(53, 8, 3),
+(54, 9, 3),
+(55, 9, 3),
+(56, 9, 3),
+(57, 9, 3),
+(58, 10, 3),
+(59, 10, 3),
+(60, 10, 3),
+(61, 10, 3), 
+(62, 13, 3),
+(63, 14, 3),
+(64, 15, 3),
+(65, 15, 3),
+(66, 16, 3),
+(67, 16, 3),
+(68, 16, 3),
+(69, 16, 3),
+(70, 17, 3),
+(71, 17, 3),
+(72, 19, 3),
+(73, 19, 3),
+(74, 19, 3),
+(75, 20, 3),
+(76, 20, 3),
+(77, 20, 3);
+
+/* Inserting data into inventory table - Branch_id 4 */
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(78, 1, 4),
+(79, 3, 4),
+(80, 7, 4),
+(81, 9, 4),
+(82, 11, 4),
+(83, 15, 4),
+(84, 18, 4),
+(85, 19, 4),
+(86, 20, 4);
+
+
+/* Inserting data into inventory table - Branch_id 5 */
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(87, 2, 5),
+(88, 2, 5),
+(89, 3, 5),
+(90, 4, 5),
+(91, 5, 5),
+(92, 6, 5),
+(93, 7, 5),
+(94, 7, 5),
+(95, 8, 5),
+(96, 9, 5),
+(97, 9, 5),
+(98, 10, 5),
+(99, 10, 5),
+(100, 10, 5),
+(101, 11, 5),
+(102, 12, 5),
+(103, 17, 5),
+(104, 17, 5),
+(105, 19, 5),
+(106, 19, 5);
+
+/* Inserting data into inventory table - Branch_id 6 */
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(107, 1, 6),
+(108, 2, 6), 
+(109, 3, 6), 
+(110, 4, 6),
+(111, 5, 6),
+(112, 6, 6),
+(113, 7, 6),
+(114, 7, 6),
+(115, 8, 6),
+(116, 9, 6),
+(117, 9, 6),
+(118, 10, 6),
+(119, 11, 6),
+(120, 12, 6),
+(121, 13, 6),
+(123, 14, 6), 
+(124, 15, 6),
+(125, 16, 6),
+(126, 17, 6),
+(127, 18, 6),
+(128, 19, 6),
+(129, 19, 6),
+(130, 20, 6);
+
+/* Inserting data into inventory table - Branch_id 7 */
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(131, 1, 7),
+(132, 1, 7),
+(133, 1, 7),
+(134, 1, 7),
+(135, 1, 7),
+(136, 2, 7),
+(137, 2, 7),
+(138, 2, 7),
+(139, 2, 7),
+(140, 3, 7),
+(141, 3, 7),
+(142, 3, 7),
+(143, 3, 7),
+(144, 4, 7),
+(145, 4, 7),
+(146, 4, 7),
+(147, 5, 7),
+(148, 5, 7),
+(149, 5, 7),
+(150, 6, 7),
+(151, 6, 7),
+(152, 7, 7),
+(153, 7, 7), 
+(154, 7, 7),
+(155, 7, 7),
+(156, 8, 7),
+(157, 8, 7),
+(158, 9, 7),
+(159, 9, 7),
+(160, 9, 7),
+(161, 9, 7),
+(162, 10, 7),
+(163, 10, 7),
+(164, 10, 7),
+(165, 11, 7),
+(166, 11, 7),
+(167, 12, 7),
+(168, 12, 7),
+(169, 13, 7),
+(170, 13, 7),
+(171, 14, 7),
+(172, 15, 7),
+(173, 16, 7),
+(174, 16, 7),
+(175, 16, 7), 
+(176, 16, 7),
+(177, 17, 7),
+(178, 17, 7),
+(179, 18, 7), 
+(180, 19, 7),
+(181, 19, 7),
+(182, 19, 7),
+(183, 20, 7),
+(184, 20, 7),
+(185, 20, 7),
+(186, 20, 7),
+(187, 20, 7);
+
+/* Inserting data into inventory table - Branch_id 8 */
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(188, 1, 8),
+(189, 2, 8), 
+(190, 3, 8),
+(191, 3, 8),
+(192, 4, 8),
+(193, 7, 8),
+(194, 10, 8),
+(195, 12, 8),
+(196, 15, 8),
+(197, 15, 8),
+(198, 16, 8),
+(199, 17, 8),
+(200, 19, 8),
+(201, 20, 8);
+
+/* Inserting data into inventory table - Branch_id 9 */
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(202, 1, 9),
+(203, 1, 9),
+(204, 2, 9),
+(205, 2, 9),
+(206, 3, 9),
+(207, 4, 9),
+(208, 5, 9),
+(209, 6, 9),
+(210, 7, 9),
+(211, 8, 9),
+(212, 9, 9),
+(213, 9, 9),
+(214, 10, 9),
+(215, 10, 9),
+(216, 11, 9),
+(217, 12, 9),
+(218, 13, 9),
+(219, 14, 9),
+(220, 15, 9),
+(221, 16, 9),
+(222, 17, 9),
+(223, 18, 9),
+(224, 19, 9),
+(225, 19, 9),
+(226, 20, 9);
+
+/* Inserting data into inventory table - Branch_id 10 */
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(227, 1, 10), 
+(228, 2, 10),
+(229, 3, 10),
+(230, 4, 10),
+(231, 5, 10),
+(232, 6, 10),
+(233, 8, 10),
+(234, 9, 10), 
+(235, 10, 10),
+(236, 15, 10),
+(237, 20, 10);
+
+/* Inserting data into book_loans table */
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(220, 15, 9, 1016, '2019-01-08', '2019-01-22', '2019-01-22'),
+(159, 9, 7, 1013, '2019-01-12',	'2019-01-26',	'2019-01-26'),
+(51, 7, 3, 1000, '2019-01-21', '2019-02-04', '2019-02-01'),
+(220, 15, 9, 1016, '2019-01-22', '2019-02-05',	'2019-02-05'),
+(137, 2, 7, 1009, '2019-01-25',	'2019-02-08',	'2019-02-08');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(116, 9, 6, 1011, '2019-01-25', '2019-02-08', '2019-02-08'),
+(123, 14, 6, 1011, '2019-01-25', '2019-02-08', '2019-02-08'),
+(49, 5, 3, 1003, '2019-01-28', '2019-02-11', '2019-02-11'),
+(107, 1, 6, 1001, '2019-01-29', '2019-02-12', '2019-02-15');
+
+/* Altering book_loans table so 'date' data columns are converted to date format */
+
+ALTER TABLE book_loans
+MODIFY Date_loaned_out DATE;
+
+ALTER TABLE book_loans
+modify Date_due_back date;
+
+ALTER TABLE book_loans
+modify Return_date date;
+
+/* Inserting data into book_loans table */
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(62, 13, 3, 1003, '2019-01-31', '2019-02-14', '2019-02-14'),
+(232, 6, 10, 1017, '2019-02-04', '2019-02-18', '2019-02-18'),
+(102, 12, 5, 1012, '2019-02-06', '2019-02-20', '2019-02-20'),
+(105, 19, 5, 1012, '2019-02-06', '2019-02-20', '2019-02-20'),
+(154, 7, 7, 1002, '2019-02-06', '2019-02-20', '2019-03-02');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(3, 1, 1, 1004, '2019-02-08', '2019-02-22', '2019-02-22'),
+(33, 16, 2, 1008, '2019-02-11', '2019-02-25', '2019-02-25'),
+(195, 12, 8, 1015, '2019-02-13', '2019-02-27', '2019-02-27'),
+(56, 9, 3, 1010, '2019-02-15', '2019-03-01', '2019-03-01');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(61, 10, 3, 1000, '2019-02-18', '2019-03-04', '2019-03-07'),
+(71, 17, 3, 1007, '2019-02-20', '2019-03-06', '2019-03-06'),
+(129, 20, 6, 1005, '2019-02-20', '2019-03-06', '2019-03-06'),
+(174, 16, 7, 1002, '2019-02-21', '2019-03-07', '2019-03-07'),
+(185, 20, 7, 1002, '2019-02-21', '2019-03-07', '2019-03-07');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(193, 7, 8, 1015, '2019-02-22', '2019-03-05', '2019-03-05'),
+(103, 17, 5, 1012, '2019-02-25', '2019-03-11', '2019-03-11'),
+(43, 3, 3, 1014, '2019-02-26', '2019-03-12', '2019-03-12'),
+(126, 17, 6, 1001, '2019-02-28', '2019-03-14', '2019-03-14'),
+(123, 14, 6, 1001, '2019-02-28', '2019-03-14', '2019-03-14');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(81, 9, 4, 1006, '2019-03-01', '2019-03-15', '2019-03-15'),
+(139, 2, 7, 1018, '2019-03-04', '2019-03-18', '2019-03-18'),
+(141, 3, 7, 1018, '2019-03-04', '2019-03-18', '2019-03-18'),
+(107, 1, 6, 1011, '2019-03-05', '2019-03-19', '2019-03-19');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(138, 2, 7, 1012, '2019-03-06', '2019-03-20', '2019-03-20'),
+(139, 2, 7, 1013, '2019-03-06', '2019-03-20', '2019-03-20'),
+(77, 20, 3, 1007, '2019-03-07', '2019-03-21', '2019-03-21'),
+(45, 2, 3, 1000, '2019-03-08', '2019-03-22', '2019-03-22');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(59, 10, 3, 1003, '2019-03-09', '2019-03-23', '2019-03-23'),
+(79, 1, 4, 1006, '2019-03-11', '2019-03-25', '2019-03-25'),
+(31, 9, 2, 1008, '2019-03-11', '2019-03-25', '2019-03-27'),
+(141, 3, 7, 1013, '2019-03-12', '2019-03-26', '2019-03-26'),
+(143, 3, 7, 1002, '2019-03-13', '2019-03-27', '2019-03-27');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(14, 9, 1, 1003, '2019-03-14', '2019-03-28', '2019-03-28'),
+(131, 1, 7, 1018, '2019-03-14', '2019-03-28', '2019-03-28'),
+(58, 10, 3, 1014, '2019-03-16', '2019-03-30', '2019-03-30'),
+(46, 4, 3, 1014, '2019-03-16', '2019-03-30', '2019-03-30');
+
+
+/* Inserting data into Book table */
+
+INSERT INTO book
+(book_ID, title, author, publisher) VALUES 
+(21, 'The Master and Margarita', 'Mikhail Bulgakov', 'Everyman'),
+(22, 'The Go-Between', 'L. P. Hartley', 'Penguin Books Ltd'),
+(23, 'One Flew Over the Cuckoos Nest', 'Ken Kesey', 'Penguin Books Ltd'),
+(24, 'Nineteen Eighty-Four','George Orwell', 'HarperCollins Publishers'),
+(25, 'Buddenbrooks', 'Thomas Mann', 'Everyman');
+
+/* Inserting data into inventory table */
+
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(238, 21, 1),
+(239, 22, 1),
+(240, 23, 1),
+(241, 24, 1),
+(242, 25, 1),
+(243, 23, 2),
+(244, 24, 2),
+(245, 21, 3),
+(247, 22, 3),
+(248, 23, 3),
+(249, 23, 3),
+(250, 24, 3),
+(251, 24, 3),
+(252, 25, 3),
+(253, 24, 4),
+(254, 21, 5),
+(255, 22, 5),
+(256, 23, 5),
+(257, 24, 5),
+(258, 22, 6),
+(259, 23, 6),
+(260, 23, 6),
+(261, 24, 6),
+(262, 24, 6),
+(263, 21, 7),
+(264, 21, 7),
+(265, 22, 7),
+(266, 23, 7),
+(267, 23, 7),
+(268, 23, 7),
+(269, 24, 7),
+(270, 24, 7),
+(271, 24, 7),
+(272, 25, 7),
+(273, 25, 7);
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(274, 23, 8),
+(275, 24, 8),
+(276, 25, 8),
+(277, 21, 9),
+(278, 22, 9),
+(279, 23, 9),
+(280, 23, 9),
+(281, 24, 9),
+(282, 24, 9),
+(283, 25, 9),
+(284, 23, 10),
+(285, 24, 10);
+ 
+/* Inserting data into Book table */
+
+INSERT INTO book
+(book_ID, title, author, publisher) VALUES 
+(26, 'The Grapes of Wrath', 'John Steinbeck', 'Penguin Books Ltd'),
+(27, 'Beloved', 'Toni Morrison', 'Vintage Publishing'),
+(28, 'The Code of the Woosters', 'P.G. Wodehouse', 'Everyman'),
+(29, 'Dracula', 'Bram Stoker', 'Penguin Books Ltd'),
+(30, 'The Lord of the Rings', 'J. R. R. Tolkien', 'HarperCollins Publishers'),
+(31, 'The Adventures of Huckleberry Finn', 'Mark Twain', 'Penguin Books Ltd');
+
+/* Inserting data into inventory table */
+
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(286, 26, 1),
+(287, 29, 1),
+(288, 31, 1),
+(289, 26, 2),
+(290, 30, 2),
+(291, 26, 3),
+(292, 28, 3),
+(293, 29, 3),
+(294, 30, 3),
+(295, 31, 3),
+(296, 28, 4),
+(297, 30, 4),
+(298, 26, 5),
+(299, 27, 5),
+(300, 29, 5),
+(301, 30, 5),
+(302, 31, 5),
+(303, 26, 6),
+(304, 27, 6),
+(305, 30, 6),
+(306, 31, 6),
+(307, 26, 7),
+(308, 26, 7),
+(309, 27, 7),
+(310, 28, 7),
+(311, 29, 7),
+(312, 29, 7),
+(313, 30, 7),
+(314, 30, 7),
+(315, 31, 7),
+(316, 31, 7),
+(317, 29, 8),
+(318, 31, 8),
+(319, 26, 9),
+(320, 28, 9),
+(321, 29, 9),
+(322, 30, 9),
+(323, 31, 9),
+(324, 28, 10),
+(325, 31, 10);
+
+/* Inserting data into book_loans table */
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(227, 1, 10, 1017, '2019-03-18', '2019-04-01', '2019-03-21'),
+(214, 10, 9, 1016, '2019-03-19', '2019-04-02', '2019-04-01'),
+(234, 9, 10, 1017, '2019-03-21', '2019-04-04', '2019-03-28'),
+(116, 9, 6, 1001, '2019-03-22', '2019-04-05', '2019-04-05'),
+(249, 23, 3, 1007, '2019-03-22', '2019-04-05', '2019-04-05');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(177, 17, 7, 1013, '2019-03-25', '2019-04-08', NULL),
+(250, 24, 3, 1000, '2019-03-25', '2019-04-08', '2019-04-08'),
+(251, 24, 3, 1003, '2019-03-25', '2019-04-08', '2019-03-29'),
+(126, 17, 6, 1011, '2019-03-26', '2019-04-09', '2019-04-09'),
+(36, 1, 3, 1010, '2019-03-27', '2019-04-10', '2019-04-10');
+
+/* Inserting data into customer table */
+
+INSERT INTO customer 
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Walter', 'Scotty', 'wscotty@aol.com', '44754168813', 'Jasmine Cottage, Crocker Lane', 'LN10 6NU', 'Woodhall Spa'),
+('Khloe', 'Louise', 'khollou94@hotmail.com', '44779836250', '77 Hollies Road', 'LN8 4CD', 'Wragby'),
+('Megan', 'Allen', 'mega001@icloud.com', '44792118143', '12 Harnham Grove', 'LN2 2EX', 'Lincoln'),
+('Beatrice', 'Greg', NULL, '01780484290', '208 Lichfield Road', 'PE9 4DD', 'Stamford');
+
+INSERT INTO customer 
+(first_name, last_name, email, PhoneNumber, address, post_code, District) VALUES
+('Kasandra', 'Benedykt', 'kasandra.benedykt@yahoo.co.uk', '44728080591', '3 Stoneacre Close', 'PE21 2JH', 'Boston'),
+('Alexandra', 'Helmold', 'lexieh99@gmail.co.uk', '44783044409', '43 Wentworth Drive', 'PE20 3LK', 'Boston'),
+('Irene', 'Gracelyn', NULL, '01205345019', '5 Arms Gardens, Swineshead', 'PE20 3KM', 'Boston');
+
+/* Inserting data into book_loans table */
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(70, 17, 3, 1024, '2019-03-28', '2019-04-11', '2019-04-10'),
+(261, 24, 6, 1019, '2019-03-28', '2019-04-11', '2019-04-11'),
+(196, 15, 8, 1015, '2019-03-29', '2019-04-12', '2019-04-19'),
+(180, 19, 7, 1021, '2019-04-01', '2019-04-15', '2019-04-12');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(269, 24, 7, 1002, '2019-04-02', '2019-04-16', '2019-04-10'),
+(37, 1, 3, 1023, '2019-04-02', '2019-04-16', '2019-04-16'),
+(227, 1, 10, 1025, '2019-04-03', '2019-04-17', '2019-04-17'),
+(291, 26, 3, 1000, '2019-04-04', '2019-04-18', '2019-04-18');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(212, 9, 9, 1022, '2019-04-05', '2019-04-19', '2019-04-15'),
+(202, 1, 9, 1022, '2019-04-05', '2019-04-19', '2019-04-19'),
+(84, 18, 4, 1006, '2019-04-06', '2019-04-20', '2019-04-24'),
+(38, 1, 3, 1024, '2019-04-08', '2019-04-22', '2019-04-22');
+
+/* Upating data in book_loans table, as I saw an error */
+
+UPDATE book_loans
+SET branch_id = 3
+WHERE loan_no = 1143;
+
+/* Inserting data into book_loans table */
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(250, 24, 3, 1000, '2019-04-08', '2019-04-22', '2019-04-16'),
+(9, 6, 1, 1004, '2019-04-09', '2019-04-23', '2019-04-17'),
+(113, 7, 6, 1005, '2019-04-10', '2019-04-24', '2019-04-24'),
+(112, 6, 6, 1011, '2019-04-10', '2019-04-24', '2019-04-19'),
+(188, 1, 8, 1020, '2019-04-11', '2019-04-25', '2019-04-25'),
+(274, 23, 8, 1015, '2019-04-12', '2019-04-26', '2019-04-26'),
+(311, 29, 7, 1009, '2019-04-13', '2019-04-27', '2019-04-20'),
+(54, 9, 3, 1023, '2019-04-13', '2019-04-27', '2019-04-22'),
+(150, 6, 7, 1021, '2019-04-15', '2019-04-29', '2019-04-29'),
+(219, 14, 9, 1022, '2019-04-15', '2019-04-29', '2019-04-19'),
+(13, 8, 1, 1004, '2019-04-17', '2019-05-01', '2019-04-26'),
+(222, 17, 9, 1022, '2019-04-19', '2019-05-03', '2019-04-25'),
+(125, 16, 6, 1005, '2019-04-20', '2019-05-04', '2019-04-29');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(62, 13, 3, 1010, '2019-04-22', '2019-05-06', '2019-05-06'),
+(324, 28, 10, 1025, '2019-04-23', '2019-05-07', '2019-04-30'),
+(204, 2, 9, 1016, '2019-04-23', '2019-05-07', '2019-05-07'),
+(313, 30, 7, 1002, '2019-04-24', '2019-05-08', '2019-05-08'),
+(132, 1, 7, 1013, '2019-04-25', '2019-05-09', '2019-05-03'),
+(301, 30, 5, 1012, '2019-04-26', '2019-05-10', '2019-05-10'),
+(158, 9, 7, 1018, '2019-04-27', '2019-05-11', NULL),
+(234, 9, 10, 1025, '2019-04-29', '2019-05-13', '2019-05-07'),
+(147, 5, 7, 1021, '2019-04-30', '2019-05-14', '2019-05-17'),
+(259, 23, 6, 1011, '2019-05-01', '2019-05-15', '2019-05-09'),
+(148, 5, 7, 1009, '2019-05-02', '2019-05-16', '2019-05-11'),
+(62, 13, 3, 1023, '2019-05-03', '2019-05-17', '2019-05-17'), 
+(190, 3, 8, 1020, '2019-05-04', '2019-05-18', '2019-05-11');
+
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(128, 19, 6, 1001, '2019-05-05', '2019-05-19', '2019-05-19'),
+(248, 23, 3, 1003, '2019-05-06', '2019-05-20', '2019-05-15'),
+(62, 13, 3, 1010, '2019-05-06', '2019-05-20', '2019-05-10'),
+(313, 30, 7, 1002, '2019-05-08', '2019-05-22', '2019-05-22');
+
+/* Inserting data into Book table */
+
+INSERT INTO book
+(book_ID, title, author, publisher) VALUES 
+(32, 'The Da Vinci Code', 'Dan Brown', 'Transworld Publishers Ltd'),
+(33, 'Murder on the Orient Express', 'Agatha Christie', 'HarperCollins Publishers'),
+(34, 'Along Came a Spider', 'James Patterson', 'Cornerstone'),
+(35, 'The Girl on the Train', 'Paula Hawkins', 'Transworld Publishers Ltd'),
+(36, 'Killing Floor', 'Lee Child', 'Transworld Publishers Ltd'),
+(37, 'Clear and Present Danger', 'Tom Clancey', 'HarperCollins Publishers'),
+(38, 'Wanderlust', 'Danielle Steel', 'Little, Brown Book Group');
+
+/* Inserting data into inventory table */
+
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(326, 32, 1),
+(327, 33, 1),
+(328, 34, 1),
+(329, 35, 1),
+(330, 38, 1),
+(331, 32, 2),
+(332, 34, 2),
+(333, 35, 2),
+(334, 36, 2),
+(335, 38, 2),
+(336, 32, 3),
+(337, 32, 3),
+(338, 33, 3),
+(339, 33, 3),
+(340, 34, 3),
+(341, 35, 3),
+(342, 36, 3),
+(343, 37, 3),
+(344, 38, 3),
+(345, 38, 3),
+(346, 32, 4),
+(347, 33, 4),
+(348, 34, 4),
+(349, 35, 4),
+(350, 32, 5),
+(351, 33, 5),
+(352, 34, 5),
+(353, 35, 5),
+(354, 36, 5),
+(355, 37, 5),
+(356, 38, 5), 
+(357, 32, 6),
+(358, 33, 6),
+(359, 34, 6),
+(360, 35, 6),
+(361, 36, 6),
+(362, 37, 6),
+(363, 38, 6);
+
+INSERT INTO inventory
+(inventory_id, book_id, branch_id) VALUES
+(364, 32, 7),
+(365, 32, 7),
+(367, 32, 7),
+(368, 33, 7),
+(369, 33, 7),
+(370, 33, 7),
+(371, 34, 7),
+(372, 34, 7),
+(373, 34, 7),
+(374, 35, 7),
+(375, 35, 7),
+(376, 36, 7),
+(377, 36, 7),
+(378, 36, 7),
+(379, 37, 7),
+(380, 37, 7),
+(381, 38, 7),
+(382, 38, 7),
+(383, 32, 8),
+(384, 33, 8),
+(385, 34, 8),
+(386, 35, 8),
+(387, 36, 8),
+(388, 37, 8),
+(389, 38, 8),
+(390, 32, 9),
+(391, 33, 9),
+(392, 34, 9),
+(393, 35, 9),
+(394, 36, 9),
+(395, 37, 9),
+(396, 38, 9),
+(397, 32, 10),
+(398, 33, 10),
+(399, 34, 10),
+(400, 35, 10),
+(401, 36, 10),
+(402, 37, 10),
+(403, 38, 10);
+
+
+/* Inserting data into book_loans table */
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(363, 38, 6, 1011, '2019-05-09', '2019-05-23', '2019-05-18'),
+(398, 33, 10, 1017, '2019-05-10', '2019-05-24', '2019-05-13'),
+(394, 36, 9, 1022, '2019-05-10', '2019-05-24', '2019-05-22'),
+(343, 37, 3, 1000, '2019-05-11', '2019-05-25', '2019-05-25'),
+(14, 9, 1, 1004, '2019-05-12', '2019-05-26', '2019-05-26'),
+(328, 34, 1, 1004, '2019-05-12', '2019-05-26', '2019-05-26'),
+(131, 1, 7, 1021, '2019-05-13', '2019-05-27', '2019-05-20'),
+(361, 36, 6, 1019, '2019-05-15', '2019-05-29', '2019-05-29');
+
+INSERT INTO book_loans
+(inventory_id, book_id, branch_id, membership_no, date_loaned_out, date_due_back, return_date) VALUES
+(341, 35, 3, 1010, '2019-05-16', '2019-05-30', '2019-05-31'),
+(72, 19, 3, 1023, '2019-05-17', '2019-05-31', '2019-05-31'),
+(403, 38, 10, 1025, '2019-05-18', '2019-06-01', '2019-05-25'),
+(362, 37, 6, 1005, '2019-05-20', '2019-06-03', '2019-06-03');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
